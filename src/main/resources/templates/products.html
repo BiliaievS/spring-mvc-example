@@ -9,7 +9,7 @@
           rel="stylesheet" media="screen"/>
 
     <script src="http://cdn.jsdelivr.net/webjars/jquery/3.2.0/jquery.min.js"
-            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+            th:src="@{/webjars/jquery/3.2.0/jquery.min.js}"></script>
 
     <link href="../static/css/spring-core.css"
           th:href="@{css/spring-core.css}"
@@ -25,12 +25,14 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Image URL</th>
+                <th>List</th>
             </tr>
             <tr th:each="product : ${products}">
                 <td th:text="${product.id}"></td>
                 <td th:text="${product.description}"></td>
                 <td th:text="${product.price}"></td>
                 <td th:text="${product.imageURL}"></td>
+                <td><a th:href="${'/product/' + product.id}">View</a></td>
             </tr>
         </table>
     </div>
