@@ -97,4 +97,9 @@ public class ProductServiceImpl implements ProductService {
     private Integer getNextId() {
         return Collections.max(products.keySet()) + 1;
     }
+
+    @Override
+    public void delete(Integer id) {
+        products.remove(id);
+    }
 }
