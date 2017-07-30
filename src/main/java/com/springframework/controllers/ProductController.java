@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Created by sbiliaiev on 16/07/17.
  */
 @Controller
+@RequestMapping("/product")
 public class ProductController {
 
     private ProductService productService;
@@ -22,40 +23,40 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping("/products")
+    @RequestMapping("/list")
     public String listProducts(Model model){
         model.addAttribute("products", productService.listAllProducts());
-        return "products";
+        return "product/products";
     }
 
-    @RequestMapping("/product/{id}")
+    @RequestMapping("/{id}")
     public String getProductById(@PathVariable Integer id, Model model){
         model.addAttribute("product", productService.getProductById(id));
-        return "product";
+        return "product/product";
     }
 
-    @RequestMapping("product/edit/{id}")
+    @RequestMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model){
         model.addAttribute("product", productService.getProductById(id));
-        return "productform";
+        return "product/productform";
     }
 
-    @RequestMapping("/product/new")
+    @RequestMapping("/new")
     public String newProduct(Model model) {
         model.addAttribute("product", new Product());
-        return "productform";
+        return "product/productform";
     }
 
-    @RequestMapping(value = "/product", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public String saveOrUpdateProduct(Product product){
         Product savedProduct = productService.saveOrUpdateProduct(product);
 
         return "redirect:/product/" + savedProduct.getId();
     }
 
-    @RequestMapping("product/delete/{id}")
+    @RequestMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         productService.delete(id);
-        return "redirect:/products";
+        return "redirect:/product/list";
     }
 }

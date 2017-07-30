@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
         products.put(1, product1);
 
         Product product2 = new Product();
-        product2.setId(1);
+        product2.setId(2);
         product2.setDescription("Product 2");
         product2.setPrice(new BigDecimal("5.99"));
         product2.setImageURL("http://example.com/product2");
@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Integer getNextId() {
-        return Collections.max(products.keySet()) + 1;
+        return products.isEmpty() ? 0 : Collections.max(products.keySet()) + 1;
     }
 
     @Override
