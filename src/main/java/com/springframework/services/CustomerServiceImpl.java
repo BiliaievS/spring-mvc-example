@@ -1,6 +1,7 @@
 package com.springframework.services;
 
 import com.springframework.domain.Customer;
+import com.springframework.domain.IDomain;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,17 +10,9 @@ import java.util.*;
  * Created by sbiliaiev on 23/07/17.
  */
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl extends AbstractService implements CustomerService {
 
-    private Map<Integer, Customer> elements;
-
-    public CustomerServiceImpl() {
-        load();
-    }
-
-    private void load() {
-        elements = new HashMap<>();
-
+    protected void load() {
         Customer customer1 = new Customer();
         customer1.setId(1);
         customer1.setFirstName("Micheal");
@@ -48,35 +41,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> listAll() {
-        return new ArrayList<>(elements.values());
+    public List<IDomain> listAll() {
+        return super.listAll();
     }
 
     @Override
     public Customer getById(Integer id) {
-        return elements.get(id);
-    }
-
-    @Override
-    public Customer saveOrUpdate(Customer object) {
-        if (object != null){
-            if(object.getId() == null){
-                object.setId(getNextId());
-            }
-
-            elements.put(object.getId(), object);
-            return object;
-        } else {
-            throw new IllegalArgumentException("Customer can't be null");
-        }
-    }
-
-    private Integer getNextId() {
-        return elements.isEmpty() ? 0 : Collections.max(elements.keySet())+1;
+        return (Customer) super.getById(id);
     }
 
     @Override
     public void delete(Integer id) {
-        elements.remove(id);
+        super.delete(id);
+    }
+
+    @Override
+    public Customer saveOrUpdate(Customer object) {
+        return (Customer) super.saveOrUpdate(object);
     }
 }

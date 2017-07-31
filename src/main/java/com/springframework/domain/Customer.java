@@ -3,7 +3,7 @@ package com.springframework.domain;
 /**
  * Created by sbiliaiev on 23/07/17.
  */
-public class Customer {
+public class Customer implements IDomain {
 
     private Integer id;
     private String firstName;
@@ -16,10 +16,12 @@ public class Customer {
     private String state;
     private String zipCode;
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

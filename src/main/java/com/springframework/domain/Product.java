@@ -5,17 +5,19 @@ import java.math.BigDecimal;
 /**
  * Created by sbiliaiev on 16/07/17.
  */
-public class Product {
+public class Product implements IDomain{
 
     private Integer id;
     private String description;
     private BigDecimal price;
     private String imageURL;
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
