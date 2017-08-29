@@ -1,25 +1,40 @@
 package com.springframework.domain;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Created by sbiliaiev on 16/07/17.
  */
+@Entity
 public class Product implements IDomain{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    @Version
+    private Integer version;
     private String description;
     private BigDecimal price;
-    private String imageURL;
+    private String imageUrl;
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
 
     @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @Override
-    public Integer getId() {
-        return id;
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public void setDescription(String description) {
@@ -39,10 +54,10 @@ public class Product implements IDomain{
     }
 
     public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+        this.imageUrl = imageURL;
     }
 
     public String getImageURL() {
-        return imageURL;
+        return imageUrl;
     }
 }
