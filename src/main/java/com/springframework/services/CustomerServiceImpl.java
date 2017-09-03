@@ -2,6 +2,7 @@ package com.springframework.services;
 
 import com.springframework.domain.Customer;
 import com.springframework.domain.IDomain;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,6 +11,7 @@ import java.util.*;
  * Created by sbiliaiev on 23/07/17.
  */
 @Service
+@Profile("map")
 public class CustomerServiceImpl extends AbstractService implements CustomerService {
 
     protected void load() {

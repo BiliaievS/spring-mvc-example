@@ -13,7 +13,7 @@ public interface CRUDService<T> {
 
     T getById(Integer id);
 
-    T saveOrUpdate(T product);
+    T saveOrUpdate(T object);
 
     void delete(Integer id);
 }

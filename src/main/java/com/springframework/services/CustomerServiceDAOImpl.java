@@ -1,6 +1,6 @@
 package com.springframework.services;
 
-import com.springframework.domain.Product;
+import com.springframework.domain.Customer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +10,11 @@ import javax.persistence.PersistenceUnit;
 import java.util.List;
 
 /**
- * Created by sbiliaiev on 30/08/17.
+ * Created by sbiliaiev on 03/09/17.
  */
 @Service
 @Profile("jpadao")
-public class ProductServiceDAOImpl implements ProductService {
+public class CustomerServiceDAOImpl implements CustomerService {
 
     private EntityManagerFactory emf;
 
@@ -26,25 +26,23 @@ public class ProductServiceDAOImpl implements ProductService {
     @Override
     public List<?> listAll() {
         EntityManager em = emf.createEntityManager();
-        return em.createQuery("from Product", Product.class).getResultList();
+        return em.createQuery("from Customer", Customer.class).getResultList();
     }
 
     @Override
-    public Product getById(Integer id) {
+    public Customer getById(Integer id) {
         EntityManager em = emf.createEntityManager();
-
-        return em.find(Product.class, id);
+        return em.find(Customer.class, id);
     }
 
     @Override
-    public Product saveOrUpdate(Product product) {
+    public Customer saveOrUpdate(Customer customer) {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        Product savProduct = em.merge(product);
+        Customer saveCustomer = em.merge(customer);
         em.getTransaction().commit();
-
-        return savProduct;
+        return saveCustomer;
     }
 
     @Override
@@ -52,7 +50,7 @@ public class ProductServiceDAOImpl implements ProductService {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        em.remove(em.find(Product.class, id));
+        em.remove(em.find(Customer.class, id));
         em.getTransaction().commit();
     }
 }
