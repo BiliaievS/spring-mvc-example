@@ -53,11 +53,11 @@ public class Product implements IDomain{
         return price;
     }
 
-    public void setImageURL(String imageURL) {
+    public void setImageUrl(String imageURL) {
         this.imageUrl = imageURL;
     }
 
-    public String getImageURL() {
+    public String getImageUrl() {
         return imageUrl;
     }
 }

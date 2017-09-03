@@ -99,7 +99,7 @@ public class ProductControllerTest {
         testProduct.setId(id);
         testProduct.setDescription(description);
         testProduct.setPrice(price);
-        testProduct.setImageURL(imageUrl);
+        testProduct.setImageUrl(imageUrl);
 
         when(productService.saveOrUpdate(Matchers.any())).thenReturn(testProduct);
 
@@ -122,7 +122,7 @@ public class ProductControllerTest {
         assertEquals(id, boundProduct.getValue().getId());
         assertEquals(description, boundProduct.getValue().getDescription());
         assertEquals(price, boundProduct.getValue().getPrice());
-        assertEquals(imageUrl, boundProduct.getValue().getImageURL());
+        assertEquals(imageUrl, boundProduct.getValue().getImageUrl());
     }
 
     @Test
