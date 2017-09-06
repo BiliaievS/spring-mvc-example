@@ -2,6 +2,7 @@ package com.springframework.services;
 
 import com.springframework.cionfig.JPAIntegrationConfig;
 import com.springframework.domain.Customer;
+import com.springframework.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +63,22 @@ public class CustomerServiceDAOImplTest {
         Customer actual = customerService.saveOrUpdate(expected);
         List<Customer> customers = (List<Customer>) customerService.listAll();
 
-        assert customers.size() == 2;
+        assert customers.size() == 3;
 
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());
         assertEquals(expected.getFirstName(), actual.getFirstName());
+    }
+
+    @Test
+    public void testSaveWithUser() throws Exception {
+        Customer customer = new Customer();
+        User user = new User();
+        user.setUsername("Test user");
+        user.setPassword("pAssword");
+        customer.setUser(user);
+
+        Customer saved = customerService.saveOrUpdate(customer);
+        assert saved.getUser().getId() != null;
     }
 }

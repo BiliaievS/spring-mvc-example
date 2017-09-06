@@ -1,6 +1,9 @@
-package com.springframework.services;
+package com.springframework.services.jpa;
 
 import com.springframework.domain.Product;
+import com.springframework.services.ProductService;
+import com.springframework.services.security.EncryptionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +17,7 @@ import java.util.List;
  */
 @Service
 @Profile("jpadao")
-public class ProductServiceDAOImpl implements ProductService {
-
-    private EntityManagerFactory emf;
-
-    @PersistenceUnit
-    public void setEntityManagerFactory(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
+public class ProductServiceDAOImpl extends AbstractDAOService implements ProductService {
 
     @Override
     public List<?> listAll() {

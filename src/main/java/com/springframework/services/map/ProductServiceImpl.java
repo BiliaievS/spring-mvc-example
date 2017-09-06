@@ -1,7 +1,8 @@
-package com.springframework.services;
+package com.springframework.services.map;
 
 import com.springframework.domain.IDomain;
 import com.springframework.domain.Product;
+import com.springframework.services.ProductService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 

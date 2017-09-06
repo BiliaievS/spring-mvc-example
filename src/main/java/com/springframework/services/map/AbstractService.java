@@ -1,4 +1,4 @@
-package com.springframework.services;
+package com.springframework.services.map;
 
 import com.springframework.domain.IDomain;
 

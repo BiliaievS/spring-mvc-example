@@ -1,6 +1,9 @@
-package com.springframework.services;
+package com.springframework.services.jpa;
 
 import com.springframework.domain.Customer;
+import com.springframework.services.CustomerService;
+import com.springframework.services.security.EncryptionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +17,15 @@ import java.util.List;
  */
 @Service
 @Profile("jpadao")
-public class CustomerServiceDAOImpl implements CustomerService {
+public class CustomerServiceDAOImpl extends AbstractDAOService implements CustomerService {
 
-    private EntityManagerFactory emf;
+    private EncryptionService encryptionService;
 
-    @PersistenceUnit
-    public void setEntityManagerFactory(EntityManagerFactory emf) {
-        this.emf = emf;
+    @Autowired
+    public void setEncryptionService(EncryptionService encryptionService) {
+        this.encryptionService = encryptionService;
     }
+
 
     @Override
     public List<?> listAll() {
@@ -40,6 +44,12 @@ public class CustomerServiceDAOImpl implements CustomerService {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
+        if(customer.getUser() != null && customer.getUser().getPassword() != null){
+            customer.getUser().setEncryptedPassword(
+                    encryptionService.encryptString(customer.getUser().getPassword())
+            );
+        }
+
         Customer saveCustomer = em.merge(customer);
         em.getTransaction().commit();
         return saveCustomer;
