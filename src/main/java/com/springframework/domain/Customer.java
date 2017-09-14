@@ -24,7 +24,7 @@ public class Customer implements IDomain {
     private String state;
     private String zipCode;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne
     private User user;
 
     @Override

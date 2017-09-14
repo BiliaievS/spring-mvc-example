@@ -19,6 +19,9 @@ public class User implements IDomain {
     private String encryptedPassword;
     private Boolean enabled = true;
 
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Customer customer;
+
     @Override
     public Integer getId() {
         return id;
@@ -67,5 +70,14 @@ public class User implements IDomain {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        customer.setUser(this);
     }
 }

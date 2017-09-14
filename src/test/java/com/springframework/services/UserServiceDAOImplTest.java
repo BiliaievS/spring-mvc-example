@@ -1,6 +1,7 @@
 package com.springframework.services;
 
 import com.springframework.cionfig.JPAIntegrationConfig;
+import com.springframework.domain.Customer;
 import com.springframework.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,5 +38,24 @@ public class UserServiceDAOImplTest {
         System.out.println("Encrypted Password:");
         System.out.println(savedUser.getEncryptedPassword());
 
+    }
+
+    @Test
+    public void testSaveUserWithCustomer() throws Exception {
+        Customer customer = new Customer();
+        customer.setFirstName("FN");
+        customer.setLastName("LN");
+
+        User user = new User();
+        user.setUsername("userName");
+        user.setPassword("password");
+        user.setCustomer(customer);
+
+        User savedUser = userService.saveOrUpdate(user);
+
+        assert savedUser.getId() != null;
+        assert savedUser.getVersion() != null;
+        assert savedUser.getCustomer() != null;
+        assert savedUser.getCustomer().getLastName() != null;
     }
 }
