@@ -74,7 +74,7 @@ public class CustomerServiceDAOImplTest {
     public void testSaveWithUser() throws Exception {
         Customer customer = new Customer();
         User user = new User();
-        user.setUsername("Test user");
+        user.setUserName("Test user");
         user.setPassword("pAssword");
         customer.setUser(user);
 
