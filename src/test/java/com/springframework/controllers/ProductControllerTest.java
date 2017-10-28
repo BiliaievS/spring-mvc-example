@@ -107,14 +107,14 @@ public class ProductControllerTest {
                 .param("id", id.toString())
                 .param("description", description)
                 .param("price", price.toString())
-                .param("imageURL", imageUrl))
+                .param("imageUrl", imageUrl))
                     .andExpect(status().is3xxRedirection())
                     .andExpect(view().name("redirect:/product/1"))
                     .andExpect(model().attribute("product", instanceOf(Product.class)))
                     .andExpect(model().attribute("product", hasProperty("id", is(id))))
                     .andExpect(model().attribute("product", hasProperty("description", is(description))))
                     .andExpect(model().attribute("product", hasProperty("price", is(price))))
-                    .andExpect(model().attribute("product", hasProperty("imageURL", is(imageUrl))));
+                    .andExpect(model().attribute("product", hasProperty("imageUrl", is(imageUrl))));
 
         ArgumentCaptor<Product> boundProduct = ArgumentCaptor.forClass(Product.class);
         verify(productService).saveOrUpdate(boundProduct.capture());

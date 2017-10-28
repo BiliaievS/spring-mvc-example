@@ -44,6 +44,7 @@ public class CustomerServiceDAOImpl extends AbstractDAOService implements Custom
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
+
         if(customer.getUser() != null && customer.getUser().getPassword() != null){
             customer.getUser().setEncryptedPassword(
                     encryptionService.encryptString(customer.getUser().getPassword())
@@ -52,6 +53,7 @@ public class CustomerServiceDAOImpl extends AbstractDAOService implements Custom
 
         Customer saveCustomer = em.merge(customer);
         em.getTransaction().commit();
+
         return saveCustomer;
     }
 

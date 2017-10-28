@@ -18,13 +18,28 @@ public class Customer implements IDomain {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String address1;
-    private String address2;
-    private String city;
-    private String state;
-    private String zipCode;
 
-    @OneToOne
+    @Embedded
+    @AttributeOverrides( {
+            @AttributeOverride(name="address1", column = @Column(name="billingAddressLine1") ),
+            @AttributeOverride(name="address2", column = @Column(name="billingAddressLine2") ),
+            @AttributeOverride(name="city", column = @Column(name="billingCity") ),
+            @AttributeOverride(name="state", column = @Column(name="billingState") ),
+            @AttributeOverride(name="zipCode", column = @Column(name="billingZipCode") )
+    } )
+    private Address billingAddress;
+
+    @Embedded
+    @AttributeOverrides( {
+            @AttributeOverride(name="address1", column = @Column(name="shippingAddressLine1") ),
+            @AttributeOverride(name="address2", column = @Column(name="shippingAddressLine2") ),
+            @AttributeOverride(name="city", column = @Column(name="shippingCity") ),
+            @AttributeOverride(name="state", column = @Column(name="shippingState") ),
+            @AttributeOverride(name="zipCode", column = @Column(name="shippingZipCode") )
+    } )
+    private Address shippingAddress;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private User user;
 
     @Override
@@ -77,52 +92,28 @@ public class Customer implements IDomain {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAddress1() {
-        return address1;
-    }
-
-    public void setAddress1(String address) {
-        this.address1 = address;
-    }
-
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress2(String address) {
-        this.address2 = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(Address billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
 }

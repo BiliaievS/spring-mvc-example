@@ -1,5 +1,6 @@
 package com.springframework.bootstrap;
 
+import com.springframework.domain.Address;
 import com.springframework.domain.Customer;
 import com.springframework.domain.Product;
 import com.springframework.services.CustomerService;
@@ -86,10 +87,11 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         customer1.setId(1);
         customer1.setFirstName("Micheal");
         customer1.setLastName("Weston");
-        customer1.setAddress1("1 Main St");
-        customer1.setCity("Miami");
-        customer1.setState("Florida");
-        customer1.setZipCode("33101");
+        customer1.setBillingAddress(new Address());
+        customer1.getBillingAddress().setAddress1("1 Main St");
+        customer1.getBillingAddress().setCity("Miami");
+        customer1.getBillingAddress().setState("Florida");
+        customer1.getBillingAddress().setZipCode("33101");
         customer1.setEmail("micheal@burnnotice.com");
         customer1.setPhoneNumber("305.333.0101");
         customerService.saveOrUpdate(customer1);
@@ -98,10 +100,11 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         customer2.setId(2);
         customer2.setFirstName("Mark");
         customer2.setLastName("Kern");
-        customer2.setAddress1("1 Main St");
-        customer2.setCity("Warsaw");
-        customer2.setState("Poland");
-        customer2.setZipCode("28996");
+        customer2.setBillingAddress(new Address());
+        customer2.getBillingAddress().setAddress1("1 Main St");
+        customer2.getBillingAddress().setCity("Warsaw");
+        customer2.getBillingAddress().setState("Poland");
+        customer2.getBillingAddress().setZipCode("28996");
         customer2.setEmail("kern.m@gmail.com");
         customer2.setPhoneNumber("305.883.0101");
         customerService.saveOrUpdate(customer2);

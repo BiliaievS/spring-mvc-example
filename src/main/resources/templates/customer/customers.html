@@ -27,6 +27,7 @@
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Address</th>
+                <th>Zip Code</th>
                 <th>List</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -37,10 +38,11 @@
                 <td th:text="${customer.lastName}"></td>
                 <td th:text="${customer.email}"></td>
                 <td th:text="${customer.phoneNumber}"></td>
-                <td th:text="${customer.address1}"></td>
+                <td th:text="${customer.billingAddress.address1}"></td>
+                <td th:text="${customer.billingAddress.zipCode}"></td>
                 <td><a th:href="${'/customer/' + customer.id}">View</a></td>
-                <td><a th:href="${'/customer/edit/' + customer.id}">Go</a></td>
-                <td><a th:href="${'/customer/delete/' + customer.id}">Go</a></td>
+                <td><a th:href="${'/customer/edit/' + customer.id}">Edit</a></td>
+                <td><a th:href="${'/customer/delete/' + customer.id}">Delete</a></td>
             </tr>
         </table>
     </div>

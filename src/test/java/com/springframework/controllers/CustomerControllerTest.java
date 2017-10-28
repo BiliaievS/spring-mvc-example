@@ -1,5 +1,6 @@
 package com.springframework.controllers;
 
+import com.springframework.domain.Address;
 import com.springframework.domain.Customer;
 import com.springframework.services.CustomerService;
 import org.junit.Before;
@@ -101,6 +102,7 @@ public class CustomerControllerTest {
         String firstName = "Rayn";
         String lastName = "Kelly";
         String address1 = "UK, London 34";
+        String zipCode = "1234";
         String email = "rayn.kelly@gmail.com";
         String phoneNumber = "911";
 
@@ -108,7 +110,9 @@ public class CustomerControllerTest {
         testCustomer.setId(id);
         testCustomer.setFirstName(firstName);
         testCustomer.setLastName(lastName);
-        testCustomer.setAddress1(address1);
+        testCustomer.setBillingAddress(new Address());
+        testCustomer.getBillingAddress().setAddress1(address1);
+        testCustomer.getBillingAddress().setZipCode(zipCode);
         testCustomer.setEmail(email);
         testCustomer.setPhoneNumber(phoneNumber);
 
@@ -120,7 +124,8 @@ public class CustomerControllerTest {
                 .param("lastName", lastName)
                 .param("email", email)
                 .param("phoneNumber", phoneNumber)
-                .param("address1", address1))
+                .param("billingAddress.address1", address1)
+                .param("billingAddress.zipCode", zipCode))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/customer/1"))
                 .andExpect(model().attribute("customer", instanceOf(Customer.class)))
@@ -129,7 +134,8 @@ public class CustomerControllerTest {
                 .andExpect(model().attribute("customer", hasProperty("lastName", is(lastName))))
                 .andExpect(model().attribute("customer", hasProperty("email", is(email))))
                 .andExpect(model().attribute("customer", hasProperty("phoneNumber", is(phoneNumber))))
-                .andExpect(model().attribute("customer", hasProperty("address1", is(address1))));
+                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("address1", is(address1)))))
+                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("zipCode", is(zipCode)))));
 
         ArgumentCaptor<Customer> boundProduct = ArgumentCaptor.forClass(Customer.class);
         verify(customerService).saveOrUpdate(boundProduct.capture());
@@ -139,6 +145,7 @@ public class CustomerControllerTest {
         assertEquals(lastName, boundProduct.getValue().getLastName());
         assertEquals(email, boundProduct.getValue().getEmail());
         assertEquals(phoneNumber, boundProduct.getValue().getPhoneNumber());
-        assertEquals(address1, boundProduct.getValue().getAddress1());
+        assertEquals("Unexpected address", address1, boundProduct.getValue().getBillingAddress().getAddress1());
+        assertEquals("Unexpected zip code", zipCode, boundProduct.getValue().getBillingAddress().getZipCode());
     }
 }

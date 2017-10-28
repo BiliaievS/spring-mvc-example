@@ -1,6 +1,7 @@
 package com.springframework.services;
 
 import com.springframework.cionfig.JPAIntegrationConfig;
+import com.springframework.domain.Address;
 import com.springframework.domain.Customer;
 import com.springframework.domain.User;
 import org.junit.Test;
@@ -40,17 +41,18 @@ public class CustomerServiceDAOImplTest {
         expected.setId(1);
         expected.setFirstName("Micheal");
         expected.setLastName("Weston");
-        expected.setAddress1("1 Main St");
-        expected.setCity("Miami");
-        expected.setState("Florida");
-        expected.setZipCode("33101");
+        expected.setBillingAddress(new Address());
+        expected.getBillingAddress().setAddress1("1 Main St");
+        expected.getBillingAddress().setCity("Miami");
+        expected.getBillingAddress().setState("Florida");
+        expected.getBillingAddress().setZipCode("33101");
         expected.setEmail("micheal@burnnotice.com");
         expected.setPhoneNumber("305.333.0101");
 
         Customer actual = customerService.getById(expected.getId());
 
         assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());
-        assertEquals(expected.getCity(), actual.getCity());
+        assertEquals(expected.getBillingAddress().getCity(), actual.getBillingAddress().getCity());
     }
 
     @Test
