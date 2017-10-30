@@ -6,14 +6,8 @@ import javax.persistence.*;
  * Created by sbiliaiev on 23/07/17.
  */
 @Entity
-public class Customer implements IDomain {
+public class Customer extends AbstractDomain {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Version
-    private Integer version;
     private String firstName;
     private String lastName;
     private String email;
@@ -41,24 +35,6 @@ public class Customer implements IDomain {
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private User user;
-
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     public String getFirstName() {
         return firstName;

@@ -6,14 +6,10 @@ import javax.persistence.*;
  * Created by sbiliaiev on 06/09/17.
  */
 @Entity
-public class User implements IDomain {
+public class User extends AbstractDomain {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    @Version
-    private Integer version;
     private String userName;
+
     @Transient
     private String password;
     private String encryptedPassword;
@@ -24,24 +20,6 @@ public class User implements IDomain {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
-
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     public String getUserName() {
         return userName;

@@ -1,27 +1,29 @@
 package com.springframework.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
- * Created by sbiliaiev on 17/09/17.
+ * Created by sbiliaiev on 29/10/17.
  */
 @Entity
-public class CartDetail extends AbstractDomain {
+public class OrderDetail extends AbstractDomain {
 
     @ManyToOne
-    private Cart cart;
+    private Order order;
 
     @OneToOne
     private Product product;
 
     private Integer quantity;
 
-    public Cart getCart() {
-        return cart;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {

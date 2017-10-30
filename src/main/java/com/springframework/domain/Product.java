@@ -7,35 +7,11 @@ import java.math.BigDecimal;
  * Created by sbiliaiev on 16/07/17.
  */
 @Entity
-public class Product implements IDomain{
+public class Product extends AbstractDomain {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Version
-    private Integer version;
     private String description;
     private BigDecimal price;
     private String imageUrl;
-
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     public void setDescription(String description) {
         this.description = description;
