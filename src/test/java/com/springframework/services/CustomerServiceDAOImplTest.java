@@ -32,7 +32,7 @@ public class CustomerServiceDAOImplTest {
     public void testListMethod() throws Exception {
         List<Customer> customers = (List<Customer>) customerService.listAll();
 
-        assert customers.size() == 2;
+        assert customers.size() == 3;
     }
 
     @Test
@@ -63,9 +63,6 @@ public class CustomerServiceDAOImplTest {
         expected.setPhoneNumber("0101");
 
         Customer actual = customerService.saveOrUpdate(expected);
-        List<Customer> customers = (List<Customer>) customerService.listAll();
-
-        assert customers.size() == 3;
 
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());

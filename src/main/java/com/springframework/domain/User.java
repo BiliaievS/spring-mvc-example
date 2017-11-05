@@ -15,7 +15,7 @@ public class User extends AbstractDomain {
     private String encryptedPassword;
     private Boolean enabled = true;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

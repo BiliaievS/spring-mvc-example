@@ -62,7 +62,8 @@ public class CustomerServiceDAOImpl extends AbstractDAOService implements Custom
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        em.remove(em.find(Customer.class, id));
+        Customer customer = em.find(Customer.class, id);
+        em.remove(customer);
         em.getTransaction().commit();
     }
 }
