@@ -3,12 +3,16 @@ package com.springframework.services.map;
 import com.springframework.domain.IDomain;
 import com.springframework.domain.User;
 import com.springframework.services.UserService;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by sbiliaiev on 06/09/17.
  */
+@Service
+@Profile("map")
 public class UserServiceImpl extends AbstractService implements UserService {
 
     @Override

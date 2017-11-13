@@ -1,6 +1,7 @@
 package com.springframework.services.jpa;
 
 import com.springframework.domain.Customer;
+import com.springframework.domain.User;
 import com.springframework.services.CustomerService;
 import com.springframework.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,10 @@ public class CustomerServiceDAOImpl extends AbstractDAOService implements Custom
 
         em.getTransaction().begin();
         Customer customer = em.find(Customer.class, id);
-        em.remove(customer);
+        User user = customer.getUser();
+        user.setCustomer(null);
+        em.merge(user);
+//        em.remove(customer);
         em.getTransaction().commit();
     }
 }

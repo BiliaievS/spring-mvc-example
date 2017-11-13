@@ -1,6 +1,8 @@
 package com.springframework.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sbiliaiev on 06/09/17.
@@ -15,11 +17,15 @@ public class User extends AbstractDomain {
     private String encryptedPassword;
     private Boolean enabled = true;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
+
+    @ManyToMany
+    @JoinTable
+    private List<Role> roles = new ArrayList<>();
 
     public String getUserName() {
         return userName;
@@ -59,7 +65,9 @@ public class User extends AbstractDomain {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-        customer.setUser(this);
+        if(customer != null) {
+            customer.setUser(this);
+        }
     }
 
     public Cart getCart() {
@@ -68,5 +76,28 @@ public class User extends AbstractDomain {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        if(!roles.contains(role)){
+            roles.add(role);
+        }
+
+        if(!role.getUsers().contains(this)) {
+            role.getUsers().add(this);
+        }
+    }
+
+    public void remove(Role role) {
+        roles.remove(role);
+        role.getUsers().remove(this);
     }
 }
