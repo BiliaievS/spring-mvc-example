@@ -1,4 +1,7 @@
 package com.springframework.repositories;
 
-public interface ProductRepository {
+import com.springframework.domain.Product;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ProductRepository extends CrudRepository<Product, Integer> {
 }

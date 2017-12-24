@@ -1,4 +1,7 @@
 package com.springframework.repositories;
 
-public interface UserRepository {
+import com.springframework.domain.User;
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Integer> {
 }
