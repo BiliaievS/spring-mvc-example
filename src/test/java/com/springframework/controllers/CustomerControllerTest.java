@@ -1,7 +1,9 @@
 package com.springframework.controllers;
 
+import com.springframework.commands.CustomerForm;
 import com.springframework.domain.Address;
 import com.springframework.domain.Customer;
+import com.springframework.domain.User;
 import com.springframework.services.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +14,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -82,7 +85,7 @@ public class CustomerControllerTest {
         mockMvc.perform(get("/customer/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("customer/customerform"))
-                .andExpect(model().attribute("customer", instanceOf(Customer.class)));
+                .andExpect(model().attribute("customer", instanceOf(CustomerForm.class)));
     }
 
     @Test
@@ -105,6 +108,8 @@ public class CustomerControllerTest {
         String zipCode = "1234";
         String email = "rayn.kelly@gmail.com";
         String phoneNumber = "911";
+        String userName = "mwest";
+        String password = "pass";
 
         Customer testCustomer = new Customer();
         testCustomer.setId(id);
@@ -115,37 +120,35 @@ public class CustomerControllerTest {
         testCustomer.getBillingAddress().setZipCode(zipCode);
         testCustomer.setEmail(email);
         testCustomer.setPhoneNumber(phoneNumber);
+        testCustomer.setUser(new User());
+        testCustomer.getUser().setUserName(userName);
+        testCustomer.getUser().setPassword(password);
 
-        when(customerService.saveOrUpdate(Matchers.any())).thenReturn(testCustomer);
+        when(customerService.saveOrUpdateCustomerForm(Matchers.any())).thenReturn(testCustomer);
+        when(customerService.getById(Matchers.any())).thenReturn(testCustomer);
 
         mockMvc.perform(post("/customer")
-                .param("id", id.toString())
+                .param("customerId", id.toString())
                 .param("firstName", firstName)
                 .param("lastName", lastName)
+                .param("userName", userName)
+                .param("passwordText", password)
+                .param("passwordTextConf", password)
                 .param("email", email)
                 .param("phoneNumber", phoneNumber)
                 .param("billingAddress.address1", address1)
                 .param("billingAddress.zipCode", zipCode))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/customer/1"))
-                .andExpect(model().attribute("customer", instanceOf(Customer.class)))
-                .andExpect(model().attribute("customer", hasProperty("id", is(id))))
-                .andExpect(model().attribute("customer", hasProperty("firstName", is(firstName))))
-                .andExpect(model().attribute("customer", hasProperty("lastName", is(lastName))))
-                .andExpect(model().attribute("customer", hasProperty("email", is(email))))
-                .andExpect(model().attribute("customer", hasProperty("phoneNumber", is(phoneNumber))))
-                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("address1", is(address1)))))
-                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("zipCode", is(zipCode)))));
+                .andExpect(view().name("redirect:/customer/1"));
 
-        ArgumentCaptor<Customer> boundProduct = ArgumentCaptor.forClass(Customer.class);
-        verify(customerService).saveOrUpdate(boundProduct.capture());
+        ArgumentCaptor<CustomerForm> boundProduct = ArgumentCaptor.forClass(CustomerForm.class);
+        verify(customerService).saveOrUpdateCustomerForm(boundProduct.capture());
 
-        assertEquals(id, boundProduct.getValue().getId());
-        assertEquals(firstName, boundProduct.getValue().getFirstName());
-        assertEquals(lastName, boundProduct.getValue().getLastName());
-        assertEquals(email, boundProduct.getValue().getEmail());
-        assertEquals(phoneNumber, boundProduct.getValue().getPhoneNumber());
-        assertEquals("Unexpected address", address1, boundProduct.getValue().getBillingAddress().getAddress1());
-        assertEquals("Unexpected zip code", zipCode, boundProduct.getValue().getBillingAddress().getZipCode());
+        CustomerForm boundCustomer = boundProduct.getValue();
+        assertEquals(id, boundCustomer.getCustomerId());
+        assertEquals(firstName, boundCustomer.getFirstName());
+        assertEquals(lastName, boundCustomer.getLastName());
+        assertEquals(email, boundCustomer.getEmail());
+        assertEquals(phoneNumber, boundCustomer.getPhoneNumber());
     }
 }

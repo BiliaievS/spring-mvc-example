@@ -1,9 +1,12 @@
 package com.springframework.services.map;
 
+import com.springframework.commands.CustomerForm;
+import com.springframework.converters.CustomerFormToCustomer;
 import com.springframework.domain.Address;
 import com.springframework.domain.Customer;
 import com.springframework.domain.IDomain;
 import com.springframework.services.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,14 @@ import java.util.*;
 @Service
 @Profile("map")
 public class CustomerServiceImpl extends AbstractService implements CustomerService {
+
+
+    private CustomerFormToCustomer customerFormToCustomer;
+
+    @Autowired
+    public void setCustomerFormToCustomer(CustomerFormToCustomer customerFormToCustomer) {
+        this.customerFormToCustomer = customerFormToCustomer;
+    }
 
     protected void load() {
         Customer customer1 = new Customer();
@@ -64,5 +75,17 @@ public class CustomerServiceImpl extends AbstractService implements CustomerServ
     @Override
     public Customer saveOrUpdate(Customer object) {
         return (Customer) super.saveOrUpdate(object);
+    }
+
+    @Override
+    public Customer saveOrUpdateCustomerForm(CustomerForm customerForm) {
+        Customer customer = customerFormToCustomer.convert(customerForm);
+
+        if (customer.getUser().getId() != null) {
+            Customer existingCustomer = getById(customer.getUser().getId());
+            customer.getUser().setEnabled(existingCustomer.getUser().getEnabled());
+        }
+
+        return saveOrUpdate(customer);
     }
 }

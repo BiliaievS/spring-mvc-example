@@ -21,7 +21,7 @@ public class Customer extends AbstractDomain {
             @AttributeOverride(name="state", column = @Column(name="billingState") ),
             @AttributeOverride(name="zipCode", column = @Column(name="billingZipCode") )
     } )
-    private Address billingAddress;
+    private Address billingAddress = new Address();
 
     @Embedded
     @AttributeOverrides( {
@@ -31,7 +31,7 @@ public class Customer extends AbstractDomain {
             @AttributeOverride(name="state", column = @Column(name="shippingState") ),
             @AttributeOverride(name="zipCode", column = @Column(name="shippingZipCode") )
     } )
-    private Address shippingAddress;
+    private Address shippingAddress = new Address();
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private User user;

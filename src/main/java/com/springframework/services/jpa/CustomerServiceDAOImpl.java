@@ -1,5 +1,7 @@
 package com.springframework.services.jpa;
 
+import com.springframework.commands.CustomerForm;
+import com.springframework.converters.CustomerFormToCustomer;
 import com.springframework.domain.Customer;
 import com.springframework.domain.User;
 import com.springframework.services.CustomerService;
@@ -21,12 +23,17 @@ import java.util.List;
 public class CustomerServiceDAOImpl extends AbstractDAOService implements CustomerService {
 
     private EncryptionService encryptionService;
+    private CustomerFormToCustomer customerFormToCustomer;
 
     @Autowired
     public void setEncryptionService(EncryptionService encryptionService) {
         this.encryptionService = encryptionService;
     }
 
+    @Autowired
+    public void setCustomerFormToCustomer(CustomerFormToCustomer customerFormToCustomer) {
+        this.customerFormToCustomer = customerFormToCustomer;
+    }
 
     @Override
     public List<?> listAll() {
@@ -46,7 +53,7 @@ public class CustomerServiceDAOImpl extends AbstractDAOService implements Custom
 
         em.getTransaction().begin();
 
-        if(customer.getUser() != null && customer.getUser().getPassword() != null){
+        if (customer.getUser() != null && customer.getUser().getPassword() != null) {
             customer.getUser().setEncryptedPassword(
                     encryptionService.encryptString(customer.getUser().getPassword())
             );
@@ -69,5 +76,17 @@ public class CustomerServiceDAOImpl extends AbstractDAOService implements Custom
         em.merge(user);
 //        em.remove(customer);
         em.getTransaction().commit();
+    }
+
+    @Override
+    public Customer saveOrUpdateCustomerForm(CustomerForm customerForm) {
+        Customer customer = customerFormToCustomer.convert(customerForm);
+
+        if (customer.getUser().getId() != null) {
+            Customer existingCustomer = getById(customer.getUser().getId());
+            customer.getUser().setEnabled(existingCustomer.getUser().getEnabled());
+        }
+
+        return saveOrUpdate(customer);
     }
 }
