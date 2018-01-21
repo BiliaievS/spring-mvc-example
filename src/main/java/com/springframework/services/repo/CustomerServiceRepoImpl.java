@@ -56,7 +56,7 @@ public class CustomerServiceRepoImpl implements CustomerService {
         Customer customer = customerFormToCustomer.convert(customerForm);
 
         if (customer.getUser().getId() != null) {
-            Customer existingCustomer = getById(customer.getUser().getId());
+            Customer existingCustomer = getById(customer.getId());
             customer.getUser().setEnabled(existingCustomer.getUser().getEnabled());
         }
 

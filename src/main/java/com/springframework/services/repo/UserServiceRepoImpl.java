@@ -3,6 +3,7 @@ package com.springframework.services.repo;
 import com.springframework.domain.User;
 import com.springframework.repositories.UserRepository;
 import com.springframework.services.UserService;
+import com.springframework.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,16 @@ import java.util.List;
 public class UserServiceRepoImpl implements UserService {
 
     private UserRepository userRepository;
+    private EncryptionService encryptionService;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setEncryptionService(EncryptionService encryptionService) {
+        this.encryptionService = encryptionService;
     }
 
     @Override
@@ -35,6 +42,9 @@ public class UserServiceRepoImpl implements UserService {
 
     @Override
     public User saveOrUpdate(User object) {
+        if(object.getPassword() != null){
+            object.setEncryptedPassword(encryptionService.encryptString(object.getPassword()));
+        }
         return userRepository.save(object);
     }
 
