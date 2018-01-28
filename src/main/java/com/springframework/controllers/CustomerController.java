@@ -1,13 +1,17 @@
 package com.springframework.controllers;
 
 import com.springframework.commands.CustomerForm;
+import com.springframework.commands.validators.CustomerFormValidator;
 import com.springframework.converters.CustomerFormToCustomer;
+import com.springframework.converters.CustomerToCustomerForm;
 import com.springframework.domain.Customer;
 import com.springframework.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +27,8 @@ import javax.validation.Valid;
 public class CustomerController {
 
     private CustomerService customerService;
-    private CustomerFormToCustomer customerFormToCustomer;
+    private Validator validator;
+    private CustomerToCustomerForm customerToCustomerForm;
 
     @Autowired
     public void setCustomerService(CustomerService customerService) {
@@ -31,8 +36,14 @@ public class CustomerController {
     }
 
     @Autowired
-    public void setCustomerFormToCustomer(CustomerFormToCustomer customerFormToCustomer) {
-        this.customerFormToCustomer = customerFormToCustomer;
+    public void setCustomerToCustomerForm(CustomerToCustomerForm customerToCustomerForm) {
+        this.customerToCustomerForm = customerToCustomerForm;
+    }
+
+    @Autowired
+    @Qualifier("customerFormValidator")
+    public void setValidator(CustomerFormValidator validator) {
+        this.validator  = validator;
     }
 
     @RequestMapping("/list")
@@ -51,19 +62,7 @@ public class CustomerController {
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
         Customer customer = customerService.getById(id);
-        CustomerForm customerForm = new CustomerForm();
-
-        customerForm.setCustomerId(customer.getId());
-        customerForm.setCustomerVersion(customer.getVersion());
-        customerForm.setFirstName(customer.getFirstName());
-        customerForm.setEmail(customer.getEmail());
-        customerForm.setLastName(customer.getLastName());
-        customerForm.setPhoneNumber(customer.getPhoneNumber());
-        customerForm.setUserId(customer.getUser().getId());
-        customerForm.setUserName(customer.getUser().getUserName());
-        customerForm.setUserVersion(customer.getUser().getVersion());
-
-        model.addAttribute("customerForm", customerForm);
+        model.addAttribute("customerForm", customerToCustomerForm.convert(customer));
         return "customer/customerform";
     }
 
@@ -75,6 +74,8 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String saveOrUpdate(@Valid CustomerForm customer, BindingResult bindingResult) {
+
+        validator.validate(customer, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "customer/customerform";

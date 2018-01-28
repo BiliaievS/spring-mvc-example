@@ -1,6 +1,7 @@
 package com.springframework.services.repo;
 
 import com.springframework.domain.User;
+import com.springframework.repositories.CustomerRepository;
 import com.springframework.repositories.UserRepository;
 import com.springframework.services.UserService;
 import com.springframework.services.security.EncryptionService;
@@ -17,6 +18,7 @@ public class UserServiceRepoImpl implements UserService {
 
     private UserRepository userRepository;
     private EncryptionService encryptionService;
+    private CustomerRepository customerRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -26,6 +28,11 @@ public class UserServiceRepoImpl implements UserService {
     @Autowired
     public void setEncryptionService(EncryptionService encryptionService) {
         this.encryptionService = encryptionService;
+    }
+
+    @Autowired
+    public void setCustomerRepository(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -50,6 +57,8 @@ public class UserServiceRepoImpl implements UserService {
 
     @Override
     public void delete(Integer id) {
-        userRepository.delete(id);
+        User user = userRepository.findOne(id);
+        customerRepository.delete(user.getCustomer());
+        userRepository.delete(user);
     }
 }

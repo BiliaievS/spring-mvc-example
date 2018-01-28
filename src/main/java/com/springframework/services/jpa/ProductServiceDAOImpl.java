@@ -1,5 +1,8 @@
 package com.springframework.services.jpa;
 
+import com.springframework.commands.ProductForm;
+import com.springframework.converters.ProductFormToProduct;
+import com.springframework.converters.ProductToProductForm;
 import com.springframework.domain.Product;
 import com.springframework.services.ProductService;
 import com.springframework.services.security.EncryptionService;
@@ -18,6 +21,13 @@ import java.util.List;
 @Service
 @Profile("jpadao")
 public class ProductServiceDAOImpl extends AbstractDAOService implements ProductService {
+
+    private ProductFormToProduct productFormToProduct;
+
+    @Autowired
+    public void setProductFormToProduct(ProductFormToProduct productFormToProduct) {
+        this.productFormToProduct = productFormToProduct;
+    }
 
     @Override
     public List<?> listAll() {
@@ -41,6 +51,10 @@ public class ProductServiceDAOImpl extends AbstractDAOService implements Product
         em.getTransaction().commit();
 
         return savProduct;
+    }
+
+    public Product saveOrUpdateProductForm(ProductForm productForm) {
+        return saveOrUpdate(productFormToProduct.convert(productForm));
     }
 
     @Override
